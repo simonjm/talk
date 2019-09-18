@@ -2478,6 +2478,7 @@ type Query {
     storyID: ID
     status: COMMENT_STATUS
     tag: TAG
+    query: String
   ): CommentsConnection! @auth(roles: [ADMIN, MODERATOR])
 
   """

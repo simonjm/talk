@@ -150,6 +150,17 @@ export async function createCommentIndexes(mongo: Db) {
     }
   );
 
+  // Text searches.
+  await createIndex(
+    {
+      tenantID: 1,
+      "revisions.body": "text",
+    },
+    {
+      background: true,
+    }
+  );
+
   const variants = createConnectionOrderVariants<Readonly<Comment>>([
     { createdAt: -1 },
     { createdAt: 1 },
@@ -163,6 +174,13 @@ export async function createCommentIndexes(mongo: Db) {
     tenantID: 1,
     storyID: 1,
     status: 1,
+  });
+
+  // Story based Comment Connection pagination.
+  // { storyID, ...connectionParams }
+  await variants(createIndex, {
+    tenantID: 1,
+    storyID: 1,
   });
 
   // Moderation based Comment Connection pagination.
